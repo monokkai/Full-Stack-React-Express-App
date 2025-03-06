@@ -14,29 +14,20 @@ app.get("/users", (req, res) => {
   return res.send(200, JSON.parse(userFile));
 });
 
-// /user/:id: Обработчик, который принимает ID пользователя и возвращает данные о пользователе, найденные в JSON-файле.
-// Формат данных пользователя:
-// "id" : 1,
-// "firstName": "Иван"
-// "lastName": "Иванов"
-// "email": "ivan@example.com",
-// "address": "123 Main St",
 app.get("/users/:id", (req, res) => {
   const userFile = fs.readFileSync("./database/users.json", "utf-8");
   const users = JSON.parse(userFile);
   const user = users.find((user) => user.id === parseInt(req.params.id));
   if (!user) {
-    return res.status(404).send("User not found");
+    return res.status(404).send("User was not found");
   }
   return res.status(200).send(user);
 });
-//User
 
 //Logger
 app.get("/logger", (req, res) => {
   res.send("Welcome to logging!");
 });
-//Logger
 
 app.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`);
