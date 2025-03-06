@@ -8,13 +8,28 @@ app.get("/", (req, res) => {
 });
 
 // User
-app.get("/user", (req, res) => {
+app.get("/users", (req, res) => {
   console.log(__dirname);
   const userFile = fs.readFileSync("./database/users.json", "utf-8");
   return res.send(200, JSON.parse(userFile));
 });
 
-app.get("/user/:id", (req, res) => {});
+// /user/:id: Обработчик, который принимает ID пользователя и возвращает данные о пользователе, найденные в JSON-файле.
+// Формат данных пользователя:
+// "id" : 1,
+// "firstName": "Иван"
+// "lastName": "Иванов"
+// "email": "ivan@example.com",
+// "address": "123 Main St",
+app.get("/users/:id", (req, res) => {
+  const userFile = fs.readFileSync("./database/users.json", "utf-8");
+  const users = JSON.parse(userFile);
+  const user = users.find((user) => user.id === parseInt(req.params.id));
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+  return res.status(200).send(user);
+});
 //User
 
 //Logger
